@@ -4,6 +4,7 @@ import User from "@/models/Users";
 import { writeFile } from "fs/promises";
 import path from "path";
 import bcrypt from "bcryptjs";
+import cloudinary from "@/lib/cloudinary";
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,18 +26,25 @@ export async function POST(req: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // ⬇️ حفظ الصورة داخل مجلد /public/uploads
+    // ⬇️ حفظ الصورة داخل مجلد 
     let imageUrl = "";
-    if (file && file.size > 0) {
+    if (file) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const imageName = `${Date.now()}-${file.name}`;
-      const imagePath = path.join(process.cwd(), "public/uploads", imageName);
 
-      await writeFile(imagePath, buffer);
-      imageUrl = `/uploads/${imageName}`;
+      const upload = await new Promise<{ secure_url: string }>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "users" }, // ⬅️ الصور هتتخزن في فولدر "users"
+          (error, result) => {
+            if (error || !result) reject(error);
+            else resolve(result as { secure_url: string });
+          }
+        );
+        stream.end(buffer);
+      });
+
+      imageUrl = upload.secure_url;
     }
-
     const newUser = new User({
       userName,
       email,

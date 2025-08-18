@@ -3,6 +3,7 @@ import {dbConection} from '@/lib/db'
 import  Product from "@/models/Products";
 import { writeFile } from "fs/promises";
 import path from "path";
+import cloudinary from "@/lib/cloudinary";
 export async function GET() {
   try {
     await dbConection();
@@ -28,16 +29,23 @@ export async function POST(request: NextRequest) {
 
     // حفظ الصورة في مجلد /public/uploads
     let imageUrl = "";
-    if (file && file.size > 0) {
+    if (file) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const imageName = `${Date.now()}-${file.name}`;
-      const imagePath = path.join(process.cwd(), "public/uploadsProducts", imageName);
 
-      await writeFile(imagePath, buffer);
-      imageUrl = `/uploadsProducts/${imageName}`;
+      const upload = await new Promise<{ secure_url: string }>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "products" }, // ⬅️ الصور هتتخزن في فولدر "products"
+          (error, result) => {
+            if (error || !result) reject(error);
+            else resolve(result as { secure_url: string });
+          }
+        );
+        stream.end(buffer);
+      });
+
+      imageUrl = upload.secure_url;
     }
-
     const newProduct = new Product({ 
       category,
       type,

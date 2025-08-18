@@ -19,7 +19,7 @@ import Link from "next/link"
                 width={150}
                 height={150}
                 loading="lazy"
-                className="rounded-full absolute -top-16"
+                className="rounded-full absolute -top-20"
             />
             <div className="name-email text-center mt-28 flex flex-col">
                 <h1 className="text-[#331A12] text-4xl font-bold font-serif">{User.userName}</h1>
