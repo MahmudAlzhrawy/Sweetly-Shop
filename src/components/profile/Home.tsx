@@ -2,7 +2,7 @@
     import { useUserManage } from "@/Context/UserManageContext"
     import Image from "next/image"
     import { useState } from "react"
-    import { Edit, Trash, ShoppingBasket ,LogOut ,DiamondPlus } from "lucide-react"
+    import { Edit, ShoppingBasket ,LogOut ,DiamondPlus } from "lucide-react"
     import EditProfile from "./EditProfile" // الفورم اللي كتبناه قبل
 import Link from "next/link"
 
@@ -27,7 +27,7 @@ import Link from "next/link"
             </div>
             <div className="pages gap-4 mt-14 w-[70%] flex flex-col justify-center items-center">
                 {
-                    userRole==="admin" &&
+                    userRole === "admin" &&
                     <Link  href={"/Add"}
                         className="flex rounded-md shadow shadow-[#331A12] text-[#331A12] text-2xl justify-evenly bg-[#FBECE0] p-4 w-full"
                     >
@@ -39,9 +39,6 @@ import Link from "next/link"
                     className="flex rounded-md shadow shadow-[#331A12] text-[#331A12] text-2xl justify-evenly bg-[#FBECE0] p-4 w-full"
                 >
                     <Edit /> Edit Profile
-                </button>
-                <button className="flex rounded-md shadow shadow-[#331A12] text-[#331A12] text-2xl justify-evenly bg-[#FBECE0] p-4 w-full">
-                    <Trash/> Delete Account
                 </button>
                 <Link href={'/orders'} className="flex rounded-md shadow shadow-[#331A12] text-[#331A12] text-2xl justify-evenly bg-[#FBECE0] p-4 w-full">
                     <ShoppingBasket/> Orders
