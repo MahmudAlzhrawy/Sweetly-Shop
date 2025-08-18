@@ -47,7 +47,7 @@ const filteredProducts = useMemo(() => {
                             <h2 className="text-lg font-semibold">{product.name}</h2>
                             <p className="text-green-600 font-bold">${product.price}</p>
                             <div>
-                                {userRole==="admin"&&
+                                {userRole ==="admin"&&
                                 <button 
                                 onClick={()=>{
                                     deleteProduct(product._id)

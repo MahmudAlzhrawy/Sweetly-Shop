@@ -52,7 +52,7 @@ export const UserManageProvider : React.FC<{ children: React.ReactNode }> = ({ c
         const role=localStorage.getItem("sweetyRole")
         role&&setUserRole(role)
 
-    },[])
+    },[userId])
     const router= useRouter();
 
 const registerMutation = useMutation({
