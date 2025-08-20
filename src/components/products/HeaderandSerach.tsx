@@ -7,7 +7,7 @@ import { useMemo } from "react";
 export default function HeadersAndSearchFiled() {
     const router =useRouter();
     const{setFilter,cart}=useProductsAndOrders()
-    const{userId}=useUserManage()
+    const{userId,isLogin}=useUserManage()
     const cartLen = useMemo(() => {
      const car=cart.filter((item) => item.userId === userId);
      return car.length
@@ -28,7 +28,7 @@ return (
     {/* أيقونة الكارت على اليمين */}
     <div onClick={()=>router.push("/Cart")} className="bg-[#FEF4F0] rounded-md w-12 h-12 flex items-center justify-center ml-4 cursor-pointer">
     <ShoppingCart  className="text-gray-700" size={22} />
-    <p className="bg-[#FEF4F0] text-[#653524] p-2">{cartLen}</p>
+    <p className="bg-[#FEF4F0] text-[#653524] p-2">{isLogin==="true"?cartLen: 0 }</p>
     </div>
 </div>
 );

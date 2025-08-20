@@ -19,14 +19,18 @@ export default function Bar(){
                     router.push('/')   
                     }}
                         
-                    ><li className={`${pathname === '/' ?'text-white p-2 rounded-full border-white border mb-14 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><HomeIcon /></li></button>
-                    <button onClick={()=>{
-                        router.push('/produtcs')
-                    }}><li className={`${pathname === '/products' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Package/></li></button>
+                    ><li className={`${pathname === '/' ?'text-white p-2 rounded-full border-white border mb-14 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><HomeIcon /></li>
+                    </button>
+                    <button onClick={()=>
+                        router.push("/products")
+                    }
+                    ><li className={`${pathname === '/products' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Package/></li>
+                    </button>
                     <button
                     onClick={()=>{
                         router.push('/contact')
-                    }}><li className={`${pathname === '/contact' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Contact /></li></button>
+                    }}><li className={`${pathname === '/contact' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Contact /></li>
+                    </button>
                     <button onClick={()=>{
                         isLogin ==="true"?router.push('/profile'):(
                             Toast.fire({
@@ -35,7 +39,8 @@ export default function Bar(){
                             }),
                             router.push("/login")
                         )
-                    }}><li className={`${pathname === '/profile' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><User /></li></button>
+                    }}><li className={`${pathname === '/profile' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><User /></li>
+                    </button>
                 </ul>
             </div>
         }
