@@ -53,7 +53,7 @@ const handleAddToCart=useCallback(
     <div
       className={`
         rounded-t-[30%]
-        fixed bottom-0 left-0 w-full 
+        fixed bottom-4 left-0 w-full 
         bg-[#FDF9F5] shadow-lg
         transform transition-transform duration-500 ease-in-out
         translate-y-0

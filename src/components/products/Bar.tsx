@@ -16,16 +16,17 @@ export default function Bar(){
                 <ul className="flex w-full mx-10 justify-between items-center " >
                     <button 
                     onClick={()=>{
-                        
-                            router.push("/login")
-                        
+                    router.push('/')   
                     }}
                         
                     ><li className={`${pathname === '/' ?'text-white p-2 rounded-full border-white border mb-14 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><HomeIcon /></li></button>
-                    <button 
-                    ><li className={`${pathname === '/products' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Package/></li></button>
+                    <button onClick={()=>{
+                        router.push('/produtcs')
+                    }}><li className={`${pathname === '/products' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Package/></li></button>
                     <button
-                    ><li className={`${pathname === '/contact' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Contact /></li></button>
+                    onClick={()=>{
+                        router.push('/contact')
+                    }}><li className={`${pathname === '/contact' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Contact /></li></button>
                     <button onClick={()=>{
                         isLogin ==="true"?router.push('/profile'):(
                             Toast.fire({
