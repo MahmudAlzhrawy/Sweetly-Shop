@@ -1,12 +1,17 @@
 'use client'
 import Loading from "@/app/loading";
 import { useProductsAndOrders } from "@/Context/Products&OrdersManageContext";
+import { useUserManage } from "@/Context/UserManageContext";
+import { Toast } from "@/sweetalert";
 import { AddCartItem } from "@/utils/typs/typs";
 import { X ,PlusCircle ,MinusCircle } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 export default function ProductDetails() {
+  const router =useRouter()
+  const{isLogin}=useUserManage()
   const
    {
     products,
@@ -53,7 +58,7 @@ const handleAddToCart=useCallback(
         transform transition-transform duration-500 ease-in-out
         translate-y-0
       `}
-      style={{ height: "50vh" }}
+      style={{ height: "55vh" }}
     >
       {/* زر الإغلاق */}
       <div className="flex justify-center w-12 h-12 rounded-full p-2 bg-[#e6cdb4]">
@@ -77,7 +82,7 @@ const handleAddToCart=useCallback(
           <h2 className="text-2xl  font-serif font-bold text-[#331A12]">{filteredProduct.name}</h2>
           <p className="text-[#331A12] mt-2">Description : {filteredProduct.description}</p>
           <div className="flex flex-col mt-12">
-          <div className="price&quantity flex bg-[#FBECE0] rounded-xl  p-4 justify-between mb-2">
+          <div className="price&quantity flex bg-[#FBECE0] rounded-xl h-1/2  p-4 justify-between mb-2">
            <div className="price flex flex-col">
             <h1 className="text-[#4b2214]">Price</h1>
             <p className="text-[#462113] text-xl font-serif font-bold">${filteredProduct.price *( filtredItem?.quantity??1)}</p>
@@ -94,6 +99,7 @@ const handleAddToCart=useCallback(
           </div>
           <div className="addtocart">
             <button onClick={()=>{
+              isLogin==="true"?
               handleAddToCart({
                 name:filteredProduct.name, 
                 type:filteredProduct.type,
@@ -102,7 +108,13 @@ const handleAddToCart=useCallback(
                 description:filteredProduct.description,
                 id:filteredProduct._id,
                 userId:sweetlyId
-              })
+              }):(
+                Toast.fire({
+                icon: "warning",
+                title: "You Must Login First",
+                }),
+                router.push("/login")
+              )
             }} className="bg-[#653524] text-white py-2 px-4 font-serif text-xl rounded-lg w-full">
               Add To Cart
                 </button>

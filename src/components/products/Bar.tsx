@@ -22,25 +22,10 @@ export default function Bar(){
                     }}
                         
                     ><li className={`${pathname === '/' ?'text-white p-2 rounded-full border-white border mb-14 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><HomeIcon /></li></button>
-                    <button onClick={()=>{
-                        isLogin ==="true"?router.push('/produtcs'):(
-                            Toast.fire({
-                            icon: "warning",
-                            title: "You Must Login First",
-                            }),
-                            router.push("/login")
-                        )
-                    }}><li className={`${pathname === '/products' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Package/></li></button>
+                    <button 
+                    ><li className={`${pathname === '/products' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Package/></li></button>
                     <button
-                    onClick={()=>{
-                        isLogin ==="true"?router.push('/contact'):(
-                            Toast.fire({
-                            icon: "warning",
-                            title: "You Must Login First",
-                            }),
-                            router.push("/login")
-                        )
-                    }}><li className={`${pathname === '/contact' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Contact /></li></button>
+                    ><li className={`${pathname === '/contact' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Contact /></li></button>
                     <button onClick={()=>{
                         isLogin ==="true"?router.push('/profile'):(
                             Toast.fire({
