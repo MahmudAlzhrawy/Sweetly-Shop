@@ -26,6 +26,8 @@ userAddress:string;
 setUserAddress:Dispatch<SetStateAction<string>>
 userRole:string;
 setUserRole:Dispatch<SetStateAction<string>>
+setIsLogin:Dispatch<SetStateAction<string>>
+isLogin:string
 }
 const UserManageContext = createContext<userContextType>({
     User:{} as User,
@@ -38,12 +40,14 @@ const UserManageContext = createContext<userContextType>({
     setUserAddress:()=>{},
     userRole:'',
     setUserRole:()=>{},
+    setIsLogin:()=>{},
+    isLogin:''
 });
 export const UserManageProvider : React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const[userId,setUserId]=useState<string>('');
     const[userAddress,setUserAddress]=useState<string>('');
     const[userRole,setUserRole]=useState<string>('');
-
+    const[isLogin,setIsLogin]=useState<string>("false")
     useEffect(()=>{
         const userId = localStorage.getItem("sweetyId")
         userId&&setUserId(userId);
@@ -51,7 +55,8 @@ export const UserManageProvider : React.FC<{ children: React.ReactNode }> = ({ c
         addr&&setUserAddress(addr)
         const role=localStorage.getItem("sweetyRole")
         role&&setUserRole(role)
-
+        const log=localStorage.getItem("isLogin")
+        log&&setIsLogin(log)
     },[userId])
     const router= useRouter();
 
@@ -108,13 +113,15 @@ const registerMutation = useMutation({
       Toast.fire({
         icon: "success",
         title: "✅ Login Success",
-      });
+    });
+        setIsLogin("true");
         router.push("/products")
         if (token) {
             localStorage.setItem("token", token);
             localStorage.setItem("sweetyRole", res.data.role);
             localStorage.setItem("sweetyId", res.data.userId);
             localStorage.setItem("sweetyUserAddress", res.data.address);
+            localStorage.setItem("isLogin",JSON.stringify(isLogin));
             console.log("Login successful. Token saved:", token);
         } else {
             console.warn("No token returned from login");
@@ -183,7 +190,11 @@ const registerMutation = useMutation({
             userAddress,
             userRole,
             updateUser,
+            setIsLogin,
+            isLogin,
         }),[
+            setIsLogin,
+            isLogin,
             register,
             login,
             User,

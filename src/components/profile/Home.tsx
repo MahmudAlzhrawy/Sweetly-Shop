@@ -7,7 +7,7 @@
 import Link from "next/link"
 
     export default function Homeprof(){
-    const {User,userRole} = useUserManage()
+    const {User,userRole,setIsLogin} = useUserManage()
     const [showEdit, setShowEdit] = useState(false)
 
     return(
@@ -43,7 +43,7 @@ import Link from "next/link"
                 <Link href={'/orders'} className="flex rounded-md shadow shadow-[#331A12] text-[#331A12] text-2xl justify-evenly bg-[#FBECE0] p-4 w-full">
                     <ShoppingBasket/> Orders
                 </Link>
-                <Link href="/register" className="flex rounded-md shadow shadow-[#331A12] text-[#331A12] text-2xl justify-evenly bg-[#FBECE0] p-4 w-full">
+                <Link onClick={()=>setIsLogin("false")} href="/login" className="flex rounded-md shadow shadow-[#331A12] text-[#331A12] text-2xl justify-evenly bg-[#FBECE0] p-4 w-full">
                     <LogOut/> Logout
                 </Link>
             </div>
