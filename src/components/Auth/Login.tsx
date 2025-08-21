@@ -69,9 +69,7 @@ export default function Login() {
     </div>
     <button type="submit" className="btn absolute  left-1/2 transform -translate-x-1/2  ">Login</button>
     </form>
-    <div className="text-center  absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-4">
-        <p className="text-gray-900">You Don’t have account? <Link href={'/register'}  className="text-[#B1654A]">Sign up</Link></p>
-    </div>
+    
         </div>
     )
     

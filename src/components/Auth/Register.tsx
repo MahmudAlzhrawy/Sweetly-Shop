@@ -2,7 +2,6 @@
 import { useFormik } from "formik";
 import { User, Lock ,Mail ,LocationEdit } from "lucide-react";
 import { useUserManage } from "@/Context/UserManageContext";
-import Link from "next/link";
 import * as Yup from "yup";
 export default function Register() {
 const register = useUserManage().register;
@@ -53,9 +52,9 @@ const register = useUserManage().register;
     }
     })
     return (
-    <div className="flex flex-col  h-full">
+
         
-<form onSubmit={formik.handleSubmit}>
+<form className="" onSubmit={formik.handleSubmit}>
   {/* Username Field */}
     <div className="relative mb-3">
         <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#B1654A]" size={20} />
@@ -199,10 +198,6 @@ const register = useUserManage().register;
     </div>
     <button type="submit" className="btn absolute  left-1/2 transform -translate-x-1/2  ">Sign Up</button>
     </form>
-    <div className="text-center  absolute bottom-0 left-1/2 transform -translate-x-1/2 mb-4">
-        <p className="text-gray-900">You have an account? <Link href={'/login'}  className="text-[#B1654A]">Sign In</Link></p>
-    </div>
-        </div>
     )
     
 }

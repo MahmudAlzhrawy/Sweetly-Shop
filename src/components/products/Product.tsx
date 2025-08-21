@@ -115,9 +115,9 @@ const handleAddToCart=useCallback(
                 }),
                 router.push("/login")
               )
-            }} className="bg-[#653524] text-white py-2 px-4 font-serif text-xl rounded-lg w-full">
+            }} className="bg-[#653524]  text-white py-2 px-4 font-serif text-xl rounded-lg w-full">
               Add To Cart
-                </button>
+              </button>
           </div>
           </div>
             </div>
