@@ -13,7 +13,7 @@ export default function HeadersAndSearchFiled() {
      return car.length
     }, [cart, userId]);
 return (
-<div className="headers-and-search flex justify-center items-center bg-[#653524] h-[190px] w-full rounded-b-xl px-6">
+<div className="headers-and-search flex justify-center items-center bg-[#653524] h-[150px] w-full rounded-b-xl px-6">
     {/* حقل البحث مع أيقونة */}
     <div className="flex items-center justify-center bg-[#FEF4F0] rounded-lg px-3  w-4/5">
     <Search className="text-gray-500 mr-2" size={20} />

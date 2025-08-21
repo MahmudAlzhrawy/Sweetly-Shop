@@ -9,7 +9,7 @@ export default function Main() {
         <div className="swiper absolute top-0 left-0 w-full h-full">
           <Swipper/>
         </div>
-        <Link href={"/login"} className="font-medium text-[#B86F55]">Next</Link>
+        <Link href={"/login"} className="font-medium  py-2 px-6 rounded-xl  text-white font-serif text-xl bg-[#B86F55]">Next</Link>
     </main>
 
     )
