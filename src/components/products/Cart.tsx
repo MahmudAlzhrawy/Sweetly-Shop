@@ -89,7 +89,7 @@ return (
                 {price * quantity}$
             </p>
             </div>
-            <div className="quan flex items-center ml-10 ">
+            <div className="quan flex items-center ml-8 ">
             <button onClick={() => handleDecrease(id)}>
                 <MinusCircle
                 size={24}
@@ -104,7 +104,7 @@ return (
                 />
             </button>
             <button
-                className="ml-3 bg-[#f7e2d2] rounded-full p-2"
+                className="ml-1 bg-[#f7e2d2] rounded-full p-2"
                 onClick={() => handleDelete(id)}
             >
                 <Trash2Icon

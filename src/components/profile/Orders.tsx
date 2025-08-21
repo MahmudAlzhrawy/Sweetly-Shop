@@ -37,7 +37,7 @@ export default function Orders() {
   };
 
   return (
-    <div className="orders container h-screen mx-auto p-4 space-y-4 relative">
+    <div className="orders container h-screen mx-auto p-4 space-y-4 relative overflow-y-scroll">
       {orders.length > 0 ? (
         orders.map(({ _id, products, user, status, totalAmount, createdAt }, index) => (
           <div
