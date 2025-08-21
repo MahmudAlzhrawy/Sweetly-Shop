@@ -29,11 +29,10 @@ export default function Login() {
         
     })
     return (
-        <div className="flex flex-col  h-full">
         
 <form onSubmit={formik.handleSubmit}>
   {/* Username Field */}
-    <div className="relative mb-14">
+    <div className="relative mb-4">
         <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#B1654A]" size={20} />
         <input
         placeholder="Username"
@@ -68,9 +67,11 @@ export default function Login() {
         )}
     </div>
     <button type="submit" className="btn absolute  left-1/2 transform -translate-x-1/2  ">Login</button>
+    <p className="text-gray-900 absolute bottom-24">You Don’t have account? <Link href={'/register'}  className="text-[#B1654A]">Sign up</Link></p>
+
     </form>
     
-        </div>
+       
     )
     
 }

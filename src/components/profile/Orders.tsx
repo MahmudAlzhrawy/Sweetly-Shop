@@ -1,11 +1,12 @@
 "use client"
 import { useProductsAndOrders } from "@/Context/Products&OrdersManageContext";
+import { useUserManage } from "@/Context/UserManageContext";
 import Image from "next/image";
 import { useCallback, useState } from "react";
 
 export default function Orders() {
   const { orders, deleteOrder, updateOrder } = useProductsAndOrders();
-
+  const{userRole}=useUserManage()
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [newStatus, setNewStatus] = useState<string>("");
 
@@ -111,12 +112,14 @@ export default function Orders() {
               >
                 Delete Order
               </button>
+              {userRole ==="admin" &&
               <button
                 onClick={() => handleOpenModal(_id)}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
               >
                 Update Order Status
               </button>
+              }
             </div>
           </div>
         ))
