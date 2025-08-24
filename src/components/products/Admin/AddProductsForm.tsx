@@ -24,7 +24,7 @@ export default function AddProductsForm() {
             image: Yup.mixed().required("Image is required"),
             type: Yup.string().oneOf(["Product", "Offer"], "Invalid type").required("Type is required")
         }),
-        onSubmit: (values) => {
+        onSubmit: (values,{resetForm}) => {
             addProduct({
                 name: values.productName,
                 description: values.description,
@@ -33,8 +33,9 @@ export default function AddProductsForm() {
                 image: values.image!,
                 type: values.type,
             });
-            console.log("Form values:", values);
+            resetForm();
         },
+        
     });
 
     return (

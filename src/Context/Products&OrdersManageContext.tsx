@@ -107,9 +107,9 @@ const updateCart = useCallback((newCart: CartItem[]) => {
 
       if (itemIndex !== -1) {
         existingCartItems[itemIndex].quantity += 1;
-         Toast.fire({
+        Toast.fire({
           icon: "info",
-          title: "⚠️ This product already exists. Quantity updated.",
+          title: " This product already exists. Quantity updated.",
         });
         } else {
         existingCartItems.push({ ...cartItem, quantity: 1 });
@@ -122,7 +122,7 @@ const updateCart = useCallback((newCart: CartItem[]) => {
       updateCart(existingCartItems);
       return existingCartItems;
     });
-  }, []);
+  }, [cart,updateCart]);
 //delete from cart
   const deleteFromCart = useCallback((id: string, userId: string) => {
   setCart(prev => {
@@ -133,20 +133,20 @@ const updateCart = useCallback((newCart: CartItem[]) => {
     if (prev.length === updatedCartItems.length) {
       Toast.fire({
         icon: "error",
-        title: "⚠️ This product is not in the cart.",
+        title: " This product is not in the cart.",
       });
       return prev;
     }
 
     Toast.fire({
       icon: "warning",
-      title: "🗑️ Product removed from cart.",
+      title: " Product removed from cart.",
     });
 
     updateCart(updatedCartItems);
     return updatedCartItems;
   });
-}, []);
+}, [cart,updateCart]);
 
   // زيادة الكمية
   const increaseQuantity = useCallback((Id: string) => {
@@ -159,7 +159,7 @@ const updateCart = useCallback((newCart: CartItem[]) => {
     updateCart(updatedCart);
       return updatedCart;
     });
-  }, []);
+  }, [updateCart]);
 
   // تقليل الكمية
   const decreaseQuantity = useCallback((Id: string) => {
@@ -172,7 +172,7 @@ const updateCart = useCallback((newCart: CartItem[]) => {
     updateCart(updatedCart);
       return updatedCart;
     });
-  }, []);
+  }, [updateCart]);
   // 🆕 Create product mutation
   const productMutation = useMutation({
   mutationFn: CreateProduct,

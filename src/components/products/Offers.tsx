@@ -23,7 +23,7 @@ export default function Offers() {
     const offers = products?.filter((product) => product.type === 'Offer') || [];
 
     return (
-        <div className="offers-section px-4 py-2">
+        <div className="offers-section h-32 px-4 py-2">
             <Swiper
                 slidesPerView={1}
                 centeredSlides={true}

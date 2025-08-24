@@ -52,13 +52,14 @@ const handleAddToCart=useCallback(
   return (
     <div
       className={`
-        rounded-t-[30%]
+        rounded-t-[10%]
         fixed bottom-4 left-0 w-full 
         bg-[#FDF9F5] shadow-lg
         transform transition-transform duration-500 ease-in-out
         translate-y-0
+        z-50
       `}
-      style={{ height: "55vh" }}
+      style={{ height: "60vh" }}
     >
       {/* زر الإغلاق */}
       <div className="flex justify-center w-12 h-12 rounded-full p-2 bg-[#e6cdb4]">
@@ -81,7 +82,7 @@ const handleAddToCart=useCallback(
         <div className="content mt-2 px-4">
           <h2 className="text-2xl  font-serif font-bold text-[#331A12]">{filteredProduct.name}</h2>
           <p className="text-[#331A12] mt-2">Description : {filteredProduct.description}</p>
-          <div className="flex flex-col mt-12">
+          <div className="flex flex-col fixed bottom-2 w-[95%] left-1/2 -translate-x-1/2  mt-12">
           <div className="price&quantity flex bg-[#FBECE0] rounded-xl h-1/2  p-4 justify-between mb-2">
            <div className="price flex flex-col">
             <h1 className="text-[#4b2214]">Price</h1>
@@ -91,7 +92,7 @@ const handleAddToCart=useCallback(
                <button onClick={()=>{handleIncrease(filteredProduct._id)}}>
                    <PlusCircle size={24} className=" text-[#B86F55] rounded-full bg-[#FDF9F5]" />
                </button>
-               <span className="mx-2">{(filtredItem?.quantity)?filtredItem?.quantity:0}</span>
+               <span className="mx-2">{(filtredItem?.quantity)?filtredItem?.quantity:1}</span>
                <button onClick={()=>{handleDecrease(filteredProduct._id)}}>
                    <MinusCircle size={24} className=" rounded-full text-white bg-[#634135]" />
                </button>

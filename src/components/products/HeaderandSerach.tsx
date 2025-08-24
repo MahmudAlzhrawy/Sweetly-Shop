@@ -1,7 +1,7 @@
 "use client"
 import { useProductsAndOrders } from "@/Context/Products&OrdersManageContext";
 import { useUserManage } from "@/Context/UserManageContext";
-import { Search, ShoppingCart } from "lucide-react";
+import { Search, ShoppingBasketIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 export default function HeadersAndSearchFiled() {
@@ -26,9 +26,9 @@ return (
     </div>
 
     {/* أيقونة الكارت على اليمين */}
-    <div onClick={()=>router.push("/Cart")} className="bg-[#FEF4F0] rounded-md w-12 h-12 flex items-center justify-center ml-4 cursor-pointer">
-    <ShoppingCart  className="text-gray-700" size={22} />
-    <p className="bg-[#FEF4F0] text-[#653524] p-2">{isLogin==="true"?cartLen: 0 }</p>
+    <div onClick={()=>router.push("/Cart")} className="bg-[#FEF4F0] relative rounded-full w-12 h-12 flex items-center justify-center ml-4 cursor-pointer">
+    <ShoppingBasketIcon  className="text-gray-700" size={22} />
+    <p className=" text-[#a53309] absolute top-0 rounded-full right-0 px-2">{isLogin==="true"?cartLen: 0 }</p>
     </div>
 </div>
 );
