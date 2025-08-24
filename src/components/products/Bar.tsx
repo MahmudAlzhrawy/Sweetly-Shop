@@ -26,11 +26,11 @@ export default function Bar(){
                     }
                     ><li className={`${pathname === '/products' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Package/></li>
                     </button>
-                    <button
+                    {/* <button
                     onClick={()=>{
                         router.push('/contact')
                     }}><li className={`${pathname === '/contact' ? 'text-white p-2 rounded-full border-white border mb-10 bg-[#653524] duration-500 ease-in-out' : 'text-white'} `}><Contact /></li>
-                    </button>
+                    </button> */}
                     <button onClick={()=>{
                         isLogin ==="true"?router.push('/profile'):(
                             Toast.fire({
