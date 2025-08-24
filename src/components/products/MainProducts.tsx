@@ -41,7 +41,7 @@ const filteredProducts = useMemo(() => {
             {filteredProducts && filteredProducts.length > 0 ? (
                 <div className="grid grid-cols-2  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {filteredProducts.map((product) => (
-                        <Card   key={product._id} className="product-card flex flex-col items-center  rounded shadow mx-3">
+                        <Card   key={product._id} className="product-card flex flex-col items-center h-72  rounded shadow mx-3">
                             <Image onClick={()=>{
                                     handleOpen(product._id)
                                 }}  src={product.image} alt={product.name} 
@@ -51,7 +51,7 @@ const filteredProducts = useMemo(() => {
                             className="w-full overflow-hidden bg-transparent border-none h-full hover:scale-110 transition-all duration-300 ease-in-out  object-cover mb-2 " >
 
                             </Image>
-                            <div className="bg-[#fffcfb] w-full px-1">
+                            <div className="bg-[#fffcfb] h-[35%] w-full   p-1">
                             <h2 className="text-lg font-serif font-semibold">{product.name}</h2>
                             <p className="text-amber-900 font-bold">{product.price} $</p>
                             <div>
