@@ -20,6 +20,7 @@ export default function ProductDetails() {
     setOpenDetailes ,
     addToCart,
     cart,
+    updateProductQuantity
     }
   = useProductsAndOrders();
   const filteredProduct =useMemo(()=>{
@@ -34,11 +35,18 @@ export default function ProductDetails() {
     const id = localStorage.getItem("sweetyId");
     id && setID(id);
   },[])
+const handleDecrease = useCallback(
+(id: string) => updateProductQuantity(sweetlyId, id, "DECREMENT"),
+[updateProductQuantity, sweetlyId]
+);
+const handleIncrease = useCallback(
+(id: string) => updateProductQuantity(sweetlyId, id, "INCREMENT"),
+[updateProductQuantity, sweetlyId]
+);
 const handleAddToCart=useCallback(
   ({userId, productId, quantity})=>addToCart({userId, productId, quantity})
   ,[])
   if (!isOpenDetailes) return null; // ❌ مش موجودة أساسًا إلا لما تتفتح  
-  let count=1;
   return (
     <div
       className={`
@@ -79,11 +87,11 @@ const handleAddToCart=useCallback(
             {/* <p className="text-[#462113] text-xl font-serif font-bold">${filteredProduct.price *( filtredItem?.quantity??1)}</p> */}
            </div>
            <div className="quantity items-center justify-between flex">
-               <button onClick={()=>{count ++}}>
+               <button onClick={()=>{handleIncrease(filtredItem!.product._id!)}}>
                    <PlusCircle size={24} className=" text-[#B86F55] rounded-full bg-[#FDF9F5]" />
                </button>
-               <span className="mx-2">{(filtredItem!.quantity)?filtredItem!.quantity:count}</span>
-               <button onClick={()=>{count > 1 && count--}}>
+               <span className="mx-2">{(filtredItem?.quantity)??filtredItem?.quantity}</span>
+               <button onClick={()=>{handleDecrease(filtredItem!.product._id!)}}>
                    <MinusCircle size={24} className=" rounded-full text-white bg-[#634135]" />
                </button>
            </div>
@@ -93,7 +101,7 @@ const handleAddToCart=useCallback(
               isLogin?
               handleAddToCart({
                 productId:filteredProduct._id,
-                quantity:count,
+                quantity:1,
                 userId:sweetlyId
               }):(
                 Toast.fire({

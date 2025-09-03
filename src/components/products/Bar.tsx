@@ -1,7 +1,7 @@
 "use client"
 import { useUserManage } from "@/Context/UserManageContext";
 import { Toast } from "@/sweetalert";
-import {HomeIcon,User ,Contact,Package} from "lucide-react"
+import {HomeIcon,User ,Package} from "lucide-react"
 import Link from "next/link";
 import { usePathname, useRouter  } from "next/navigation"
 export default function Bar(){
