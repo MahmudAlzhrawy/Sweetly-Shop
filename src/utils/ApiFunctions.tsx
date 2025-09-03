@@ -6,11 +6,11 @@ export async function FetchProducts() {
   return res.data
 }
 
-export async function handleAddOrder({userId,cart}:{userId:string,cart:CartItem[]}){
+export async function handleAddOrder({userId,cart}:{userId:string,cart:CartItem}){
 const res = await axios.post("/api/oreders", {
       userId,
-      cart: cart.map(item => ({
-        productId: item.id,
+      cart: cart.items.map(item => ({
+        productId: item.product._id,
         quantity: item.quantity
       }))
     });
@@ -97,4 +97,40 @@ export function Register(data: FormData) {
         console.error("Error registering user:", error);
         throw error;
     }
+}
+export async function addItemToCart({ userId, productId, quantity }: 
+    { userId: string; productId: string; quantity: number }) 
+    {
+    const res = await axios.post("/api/cart", {
+        userId,
+        productId,
+        quantity
+    },{
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    return res.data;
+}
+export async function getCart(userId: string) {
+    const res = await axios.get(`/api/cart`, { params: { userId } });
+    return res.data;
+}
+export async function removeFromCart({ userId, productId }: 
+    { userId: string; productId: string }) {
+    const res = await axios.delete(`/api/cart`, { data: { userId, productId } });
+    return res.data;
+}
+export async function updateQuantity({ userId, productId, status }: 
+    { userId: string; productId: string; status: string }) {
+    const res = await axios.patch(`/api/cart`, {
+        userId,
+        productId,
+        status
+    },{
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    return res.data;
 }

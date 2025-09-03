@@ -37,12 +37,14 @@ export default function Orders() {
   };
 
   return (
-    <div className="orders container h-screen mx-auto p-4 space-y-4 relative overflow-y-scroll">
+    <div className="orders border border-[#633d2f] rounded-xl container h-screen mx-auto p-4 space-y-4 relative overflow-y-scroll">
+      <h2 className="text-4xl font-serif italic font-bold text-center my-4  text-[#915944]/20">Orders</h2>
+      
       {orders.length > 0 ? (
         orders.map(({ _id, products, user, status, totalAmount, createdAt }, index) => (
           <div
             key={index}
-            className="order flex flex-col bg-[#FBECE0] text-[#633d2f] p-4 rounded-xl shadow shadow-[#422b22]"
+            className="order  flex flex-col bg-[#FBECE0] text-[#633d2f] p-4 rounded-xl shadow shadow-[#422b22]"
           >
             {/* وقت الإنشاء والحالة */}
             <div className="time-status flex justify-between items-center px-2 mb-2">

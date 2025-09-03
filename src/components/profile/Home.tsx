@@ -43,7 +43,11 @@ import Link from "next/link"
                 <Link href={'/orders'} className="flex rounded-md shadow shadow-[#331A12] text-[#331A12] text-2xl justify-evenly bg-[#FBECE0] p-4 w-full">
                     <ShoppingBasket/> Orders
                 </Link>
-                <Link onClick={()=>setIsLogin("false")} href="/login" className="flex rounded-md shadow shadow-[#331A12] text-[#331A12] text-2xl justify-evenly bg-[#FBECE0] p-4 w-full">
+                <Link onClick={()=>{
+                    setIsLogin("false")
+                    localStorage.setItem("isLogin", "false")
+                }
+                    } href="/login" className="flex rounded-md shadow shadow-[#331A12] text-[#331A12] text-2xl justify-evenly bg-[#FBECE0] p-4 w-full">
                     <LogOut/> Logout
                 </Link>
             </div>

@@ -27,15 +27,21 @@ export interface Product {
     image: string;
 }
 export interface CartItem {
-    id: string;
-    userId:string,
-    type: string;
+_id: string;
+userId: string;
+items: {
+_id: string;
+product: {
+    _id: string;
     name: string;
-    description: string;
     price: number;
     image: string;
-    quantity:number;
+};
+quantity?: number; 
+}[];
 }
+    
+
 export interface AddCartItem {
     id: string;
     userId:string,

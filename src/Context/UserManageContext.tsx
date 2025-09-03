@@ -41,7 +41,7 @@ const UserManageContext = createContext<userContextType>({
     userRole:'',
     setUserRole:()=>{},
     setIsLogin:()=>{},
-    isLogin:''
+    isLogin:'false'
 });
 export const UserManageProvider : React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const[userId,setUserId]=useState<string>('');
@@ -55,9 +55,10 @@ export const UserManageProvider : React.FC<{ children: React.ReactNode }> = ({ c
         addr&&setUserAddress(addr)
         const role=localStorage.getItem("sweetyRole")
         role&&setUserRole(role)
-        const log=localStorage.getItem("isLogin")
+        const log =localStorage.getItem("isLogin")
         log&&setIsLogin(log)
-    },[userId])
+        console.log("User ID from localStorage:", log);
+    },[])
     const router= useRouter();
 
 const registerMutation = useMutation({
@@ -121,7 +122,7 @@ const registerMutation = useMutation({
             localStorage.setItem("sweetyRole", res.data.role);
             localStorage.setItem("sweetyId", res.data.userId);
             localStorage.setItem("sweetyUserAddress", res.data.address);
-            localStorage.setItem("isLogin",JSON.stringify(isLogin));
+            localStorage.setItem("isLogin", "true");
             console.log("Login successful. Token saved:", token);
         } else {
             console.warn("No token returned from login");

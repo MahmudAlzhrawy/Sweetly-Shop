@@ -9,37 +9,40 @@ import { useMemo, useCallback, useEffect } from "react";
 export default function Cart() {
 const router = useRouter();
 const { userId } = useUserManage();
-const { cart, addOrder, deleteFromCart, increaseQuantity, decreaseQuantity } =
-useProductsAndOrders();
+const { cart, addOrder,updateProductQuantity,deleteFromCart } = useProductsAndOrders();
 
 // فلترة الكارت للمستخدم الحالي مرة واحدة فقط لما cart أو userId يتغير
 const filteredCart = useMemo(() => {
-return cart.filter((item) => item.userId === userId);
+return cart;
 }, [cart, userId]);
 
-// حساب الإجمالي مرة واحدة فقط لما cart المفلتر يتغير
 const totPrice = useMemo(() => {
-return filteredCart.reduce(
-    (acc, item) => acc + item.price * (item.quantity ?? 1),
+return filteredCart.items.reduce(
+    (acc, item) => acc + item.product.price * (item.quantity ?? 1),
     0
 );
 }, [filteredCart]);
 
 // ثبّت دوال التعامل مع الكارت
 const handleDecrease = useCallback(
-(id: string) => decreaseQuantity(id),
-[decreaseQuantity]
+(id: string) => updateProductQuantity(userId, id, "DECREMENT"),
+[updateProductQuantity, userId]
 );
 const handleIncrease = useCallback(
-(id: string) => increaseQuantity(id),
-[increaseQuantity]
+(id: string) => updateProductQuantity(userId, id, "INCREMENT"),
+[updateProductQuantity, userId]
 );
-const handleDelete = useCallback(
-(id: string) => deleteFromCart(id, userId),
+const handleDeleteElement = useCallback(
+(id: string) => deleteFromCart(userId,id),
+[deleteFromCart, userId]
+);
+const handleClear = useCallback(
+(id: string) => deleteFromCart(userId,id),
 [deleteFromCart, userId]
 );
 const handleCheckout = useCallback(() => {
 addOrder(userId, filteredCart);
+handleClear("ALL");
 }, [addOrder, userId, filteredCart]);
 
 // تتبع الريندرات
@@ -62,42 +65,43 @@ return (
         <p className="text-2xl ">Cart</p>
         </div>
         <div className="text-[#FDF9F5]">
-        <Trash2Icon size={30} />
+        <Trash2Icon onClick={() => handleClear("ALL")} size={30} />
         </div>
     </div>
     </nav>
 
     {/* Cart Items */}
     <section className="items mt-20 mb-10 overflow-scroll h-[50vh]">
-    {filteredCart.map(({ id, name, image, price, quantity }) => {
+    {filteredCart.items.map(({_id, product, quantity}) => {
+    
         return (
         <div
-            key={id}
+            key={_id}
             className="flex bg-[#FBECE0] text-[#653524] h-32 w-[94%] rounded-xl mx-auto mb-12 "
         >
             <Image
             loading="lazy"
             className="rounded-full mr-6"
-            src={image}
+            src={product.image}
             alt="not Found"
             width={100}
             height={100}
             />
             <div className="flex flex-col items-center justify-center w-14 h-full ml-4">
-            <h1 className="text-2xl font-serif font-bold">{name}</h1>
+            <h1 className="text-2xl font-serif font-bold">{product.name}</h1>
             <p className="text-2xl font-mono font-extrabold">
-                {price * quantity}$
+                {product.price * quantity!}$
             </p>
             </div>
             <div className="quan flex items-center ml-8 ">
-            <button onClick={() => handleDecrease(id)}>
+            <button onClick={() => handleDecrease(product._id)}>
                 <MinusCircle
                 size={24}
                 className="rounded-full text-white bg-[#634135]"
                 />
             </button>
             <span className="mx-2 ">{quantity ?? 0}</span>
-            <button onClick={() => handleIncrease(id)}>
+            <button onClick={() => handleIncrease(product._id)}>
                 <PlusCircle
                 size={24}
                 className="text-[#B86F55] rounded-full bg-[#FDF9F5]"
@@ -105,10 +109,10 @@ return (
             </button>
             <button
                 className="ml-1 bg-[#f7e2d2] rounded-full p-2"
-                onClick={() => handleDelete(id)}
+                onClick={() => handleDeleteElement(product._id)}
             >
                 <Trash2Icon
-                size={30}
+                size={20}
                 className="rounded-full text-[#B86F55]"
                 />
             </button>
@@ -144,3 +148,5 @@ return (
 </div>
 );
 }
+
+

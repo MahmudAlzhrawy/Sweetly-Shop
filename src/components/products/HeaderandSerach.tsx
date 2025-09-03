@@ -8,10 +8,11 @@ export default function HeadersAndSearchFiled() {
     const router =useRouter();
     const{setFilter,cart}=useProductsAndOrders()
     const{userId,isLogin}=useUserManage()
-    const cartLen = useMemo(() => {
-     const car=cart.filter((item) => item.userId === userId);
-     return car.length
-    }, [cart, userId]);
+   const cartLen = useMemo(() => {
+
+  return cart.items?.length;
+}, [cart]);
+
 return (
 <div className="headers-and-search flex justify-center items-center bg-[#653524] h-[150px] w-full rounded-b-xl px-6">
     {/* حقل البحث مع أيقونة */}
@@ -28,7 +29,7 @@ return (
     {/* أيقونة الكارت على اليمين */}
     <div onClick={()=>router.push("/Cart")} className="bg-[#FEF4F0] relative rounded-full w-12 h-12 flex items-center justify-center ml-4 cursor-pointer">
     <ShoppingBasketIcon  className="text-gray-700" size={22} />
-    <p className=" text-[#a53309] absolute top-0 rounded-full right-0 px-2">{isLogin==="true"?cartLen: 0 }</p>
+    <p className=" text-[white] bg-red-500 px-2  absolute -top-2 rounded-full -right-2 ">{isLogin === "true"? cartLen : 0 }</p>
     </div>
 </div>
 );

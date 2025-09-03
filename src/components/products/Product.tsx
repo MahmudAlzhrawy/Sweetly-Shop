@@ -19,36 +19,26 @@ export default function ProductDetails() {
     isOpenDetailes, 
     setOpenDetailes ,
     addToCart,
-    increaseQuantity,
-    decreaseQuantity,
-    cart
+    cart,
     }
   = useProductsAndOrders();
   const filteredProduct =useMemo(()=>{
       return products.find((p) => p._id === productID);
   },[products,isOpenDetailes]) 
   const filtredItem= useMemo(()=>{
-    return cart.find((item)=>item.id===productID);
-  },[cart])
+   return cart.items.find((item) => item.product._id === productID);
+  },[cart.items, productID])
   const[sweetlyId,setID]=useState<string>('')
   
   useEffect(()=>{
     const id = localStorage.getItem("sweetyId");
     id && setID(id);
   },[])
-  const handleDecrease = useCallback(
-(id: string) => decreaseQuantity(id),
-[decreaseQuantity]
-);
-const handleIncrease = useCallback(
-  (id: string) => increaseQuantity(id),
-  [increaseQuantity]
-);
 const handleAddToCart=useCallback(
-  (cartItem:AddCartItem)=>addToCart(cartItem)
-  
+  ({userId, productId, quantity})=>addToCart({userId, productId, quantity})
   ,[])
   if (!isOpenDetailes) return null; // ❌ مش موجودة أساسًا إلا لما تتفتح  
+  let count=1;
   return (
     <div
       className={`
@@ -86,28 +76,24 @@ const handleAddToCart=useCallback(
           <div className="price&quantity flex bg-[#FBECE0] rounded-xl h-1/2  p-4 justify-between mb-2">
            <div className="price flex flex-col">
             <h1 className="text-[#4b2214]">Price</h1>
-            <p className="text-[#462113] text-xl font-serif font-bold">${filteredProduct.price *( filtredItem?.quantity??1)}</p>
+            {/* <p className="text-[#462113] text-xl font-serif font-bold">${filteredProduct.price *( filtredItem?.quantity??1)}</p> */}
            </div>
            <div className="quantity items-center justify-between flex">
-               <button onClick={()=>{handleIncrease(filteredProduct._id)}}>
+               <button onClick={()=>{count ++}}>
                    <PlusCircle size={24} className=" text-[#B86F55] rounded-full bg-[#FDF9F5]" />
                </button>
-               <span className="mx-2">{(filtredItem?.quantity)?filtredItem?.quantity:1}</span>
-               <button onClick={()=>{handleDecrease(filteredProduct._id)}}>
+               <span className="mx-2">{(filtredItem!.quantity)?filtredItem!.quantity:count}</span>
+               <button onClick={()=>{count > 1 && count--}}>
                    <MinusCircle size={24} className=" rounded-full text-white bg-[#634135]" />
                </button>
            </div>
           </div>
           <div className="addtocart">
             <button onClick={()=>{
-              isLogin==="true"?
+              isLogin?
               handleAddToCart({
-                name:filteredProduct.name, 
-                type:filteredProduct.type,
-                price:filteredProduct.price,
-                image:filteredProduct.image,
-                description:filteredProduct.description,
-                id:filteredProduct._id,
+                productId:filteredProduct._id,
+                quantity:count,
                 userId:sweetlyId
               }):(
                 Toast.fire({

@@ -4,19 +4,21 @@ import { useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import { createContext,Dispatch,SetStateAction,useCallback,useContext, useEffect, useMemo, useState } from "react";
 import axios, { AxiosError } from "axios";
 import { addProduct, Product ,CartItem ,AddCartItem, Order, ApiErrorResponse  } from "@/utils/typs/typs";
-import { handleAddOrder, CreateProduct, DeleteProduct, FetchProducts, UpdateProduct, handleDeleteOrder, handleUpdateOrder  } from "@/utils/ApiFunctions";
+import { handleAddOrder, CreateProduct, DeleteProduct, FetchProducts, UpdateProduct, handleDeleteOrder, handleUpdateOrder, getCart, addItemToCart, updateQuantity, removeFromCart  } from "@/utils/ApiFunctions";
 import { useUserManage } from "./UserManageContext";
 import { Toast } from "@/sweetalert";
 
 
 interface ProductsAndOrdersManageContextType {
 orders:Order[]  
-cart:CartItem[],
+cart:CartItem,
 products:Product[],
 productID:string;
 isOpenDetailes:boolean;
 isLoading:boolean;
 error:Error|null;
+isCartLoading:boolean;
+cartError:Error|null;
 filter:string;
 cayegoryFilter:string,
 updateOrder:(userId:string,status:string)=>void,
@@ -25,11 +27,10 @@ setCategoryFilter:Dispatch<SetStateAction<string>>,
 setFilter:Dispatch<SetStateAction<string>>
 setProductID:Dispatch<SetStateAction<string>>
 setOpenDetailes:Dispatch<SetStateAction<boolean>>
-increaseQuantity:(Id:string)=>void,
-decreaseQuantity:(Id:string)=>void,
-deleteFromCart:(Id:string,userId:string)=>void,
-addToCart:(item:AddCartItem )=>void, 
-addOrder:(userId:string,cart:CartItem[])=>void;   
+updateProductQuantity:(userId:string,productId:string,status:string)=>void,
+deleteFromCart:(productId:string,userId:string)=>void,
+addToCart:({ userId, productId, quantity }: { userId: string; productId: string; quantity: number }) => void,
+addOrder:(userId:string,cart:CartItem)=>void;
 addProduct:(product:addProduct)=> void;
 deleteProduct:(productId:string)=> void;
 updateProduct:(productId:string,product:addProduct)=> void;
@@ -37,7 +38,7 @@ updateProduct:(productId:string,product:addProduct)=> void;
 }
 const ProductsAndOrdersManageContext = createContext<ProductsAndOrdersManageContextType>({
     orders:[],
-    cart:[],
+    cart:{ _id:'', userId:'', items:[] },
     isOpenDetailes: false,
     productID: '',
     products: [],
@@ -45,6 +46,8 @@ const ProductsAndOrdersManageContext = createContext<ProductsAndOrdersManageCont
     error: null,
     filter:'',
     cayegoryFilter:'',
+    cartError:null,
+    isCartLoading:false,
     updateOrder:()=>{},
     deleteOrder:()=>{},
     setCategoryFilter:()=>{},
@@ -52,8 +55,7 @@ const ProductsAndOrdersManageContext = createContext<ProductsAndOrdersManageCont
     addOrder:()=>{},
     deleteFromCart:()=>{},
     addToCart:()=>{},
-    increaseQuantity:()=>{},
-    decreaseQuantity:()=>{},
+    updateProductQuantity:()=>{},
     setProductID: () => {},
     setOpenDetailes: () => {},
     addProduct:  () => {},
@@ -64,20 +66,11 @@ const ProductsAndOrdersManageContext = createContext<ProductsAndOrdersManageCont
 export const  ProductsAndOrdersManageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [productID, setProductID] = useState<string>('');
     const [isOpenDetailes, setOpenDetailes] = useState<boolean>(false);
-    const [cart, setCart] = useState<CartItem[]>([]);
     const [filter,setFilter]= useState<string>("")
     const [cayegoryFilter,setCategoryFilter]=useState<string>("")
     const {userId,userRole}=useUserManage();
 
   // تحميل البيانات من localStorage أول ما الكومبوننت يشتغل
-  useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
-    if (storedCart) {
-      setCart(JSON.parse(storedCart));
-    }
-  }, []);
-   const queryClient = useQueryClient();
-
   // 🛠️ Helper function لبناء الـ FormData
   const buildProductFormData = (product: addProduct) => {
     const formData = new FormData();
@@ -89,90 +82,75 @@ export const  ProductsAndOrdersManageProvider: React.FC<{ children: React.ReactN
     if (product.image) formData.append("image", product.image);
     return formData;
   };
+  const queryClient = useQueryClient();
 //fetch cart 
-const updateCart = useCallback((newCart: CartItem[]) => {
-    setCart(newCart);
-    localStorage.setItem("cart", JSON.stringify(newCart));
-  }, []);
-
-  // إضافة للسلة
-  const addToCart = useCallback((cartItem: AddCartItem) => {
-   
-   
-    setCart(prev => {
-      const existingCartItems = [...prev];
-      const itemIndex = existingCartItems.findIndex(
-        (item) => item.id === cartItem.id && item.userId === cartItem.userId
-      );
-
-      if (itemIndex !== -1) {
-        existingCartItems[itemIndex].quantity += 1;
-        Toast.fire({
-          icon: "info",
-          title: " This product already exists. Quantity updated.",
-        });
-        } else {
-        existingCartItems.push({ ...cartItem, quantity: 1 });
-          Toast.fire({
-          icon: "success",
-          title: "✅ Product added to cart.",
-        });
-      }
-
-      updateCart(existingCartItems);
-      return existingCartItems;
-    });
-  }, [cart,updateCart]);
-//delete from cart
-  const deleteFromCart = useCallback((id: string, userId: string) => {
-  setCart(prev => {
-    const updatedCartItems = prev.filter(
-      (item) => !(item.id === id && item.userId === userId)
-    );
-
-    if (prev.length === updatedCartItems.length) {
-      Toast.fire({
-        icon: "error",
-        title: " This product is not in the cart.",
-      });
-      return prev;
-    }
-
+const{data:cart = { _id: '', userId: '', items: [] } ,isLoading:isCartLoading, error:cartError}=useQuery<CartItem>({
+  queryKey:["cart",userId],
+  queryFn: () => getCart(userId!),
+  enabled: !!userId,
+})
+//add product
+const addCartMutation=useMutation({
+  mutationFn:addItemToCart,
+  onSuccess:()=>{
     Toast.fire({
-      icon: "warning",
-      title: " Product removed from cart.",
+      icon: "success",
+      title: "✅ Item added to cart",
     });
-
-    updateCart(updatedCartItems);
-    return updatedCartItems;
-  });
-}, [cart,updateCart]);
-
-  // زيادة الكمية
-  const increaseQuantity = useCallback((Id: string) => {
-    setCart(prev => {
-      const updatedCart = prev.map((item) =>
-        item.id === Id && item.quantity < 10
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
-    updateCart(updatedCart);
-      return updatedCart;
+    
+    queryClient.invalidateQueries({ queryKey: ["cart", userId] });
+    
+  },
+  onError: (error) => {
+    Toast.fire({
+      icon: "error",
+      title: "❌ Failed to add item",
+      text: error.message,
     });
-  }, [updateCart]);
+  },
+})
+const addToCart =useCallback((({userId, productId, quantity}) => {
+  addCartMutation.mutate({ userId, productId, quantity });
+}), [addCartMutation]);
 
-  // تقليل الكمية
-  const decreaseQuantity = useCallback((Id: string) => {
-    setCart(prev => {
-      const updatedCart = prev.map((item) =>
-        item.id === Id && item.quantity > 1
-          ? { ...item, quantity: Math.max(item.quantity - 1, 1) }
-          : item
-      );
-    updateCart(updatedCart);
-      return updatedCart;
+
+//update Quantity
+const quantityMutation=useMutation({
+  mutationFn:updateQuantity,
+  onSuccess:()=>{
+    queryClient.invalidateQueries({ queryKey: ["cart", userId] });
+  }
+})
+const updateProductQuantity =useCallback((userId:string,productId:string,status:string)=>{
+  quantityMutation.mutate({userId,productId,status})
+},[quantityMutation])
+ //delete from cart 
+const deleteMutation=useMutation({
+  mutationFn:removeFromCart,
+  onSuccess:()=>{
+      Toast.fire({
+        icon: "success",
+        title: " removed from cart",
+      });
+    queryClient.invalidateQueries({ queryKey: ["cart", userId] });
+  },
+   onError: (error) => {
+    Toast.fire({
+      icon: "error",
+      title: "❌ Failed to add item",
+      text: error.message,
     });
-  }, [updateCart]);
+  },
+
+})
+const deleteFromCart =useCallback((userId:string,productId:string)=>{
+  deleteMutation.mutate({userId,productId})
+},[deleteMutation])
+
+
+
+
+
   // 🆕 Create product mutation
   const productMutation = useMutation({
   mutationFn: CreateProduct,
@@ -360,7 +338,7 @@ const updateCart = useCallback((newCart: CartItem[]) => {
         deleteOrderMutaiton.mutate({userId})
     },[deleteOrderMutaiton])
   const addOrder = useCallback(
-    (userId: string, cart: CartItem[]) => {
+    (userId: string, cart: CartItem) => {
       orderMutation.mutate({ userId, cart });
     },
     [orderMutation]
@@ -369,6 +347,8 @@ const updateCart = useCallback((newCart: CartItem[]) => {
     const value = useMemo(() => ({
     isOpenDetailes,
     isLoading,
+    cartError:isError ? (error as Error) : null,
+    isCartLoading,
     error: isError ? (error as Error) : null,
     productID,
     products,
@@ -381,16 +361,17 @@ const updateCart = useCallback((newCart: CartItem[]) => {
     setCategoryFilter,
     setFilter, 
     addOrder,
-    increaseQuantity,
-    decreaseQuantity,
-    deleteFromCart,
     addToCart,
     setOpenDetailes,
     setProductID,
     addProduct,
     deleteProduct,
     updateProduct,
+    updateProductQuantity,
+    deleteFromCart,
   }), [
+    cartError,
+    isCartLoading,
     isOpenDetailes,
     isLoading,
     isError,
@@ -401,14 +382,13 @@ const updateCart = useCallback((newCart: CartItem[]) => {
     orders,
     filter,
     cayegoryFilter,
+    updateProductQuantity,
+    deleteFromCart,
     updateOrder,
     deleteOrder,
     setCategoryFilter,
     setFilter,
     addOrder,
-    increaseQuantity,
-    decreaseQuantity,
-    deleteFromCart,
     addToCart,
     setOpenDetailes,
     setProductID,
