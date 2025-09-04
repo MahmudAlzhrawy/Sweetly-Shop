@@ -18,7 +18,7 @@ return cart;
 
 const totPrice = useMemo(() => {
 return filteredCart.items.reduce(
-    (acc, item) => acc + item.product.price * (item.quantity ?? 1),
+    (acc, item) => acc + item.product?.price * (item.quantity ?? 1),
     0
 );
 }, [filteredCart]);
@@ -71,7 +71,7 @@ return (
     </nav>
 
     {/* Cart Items */}
-    <section className="items mt-20 mb-10 overflow-scroll h-[50vh]">
+    <section className="items mt-8 mb-10 overflow-scroll h-[40vh]">
     {filteredCart.items.map(({_id, product, quantity}) => {
     
         return (
@@ -82,19 +82,19 @@ return (
             <Image
             loading="lazy"
             className="rounded-full mr-6"
-            src={product.image}
+            src={product?.image}
             alt="not Found"
             width={100}
             height={100}
             />
             <div className="flex flex-col items-center justify-center w-14 h-full ml-4">
-            <h1 className="text-2xl font-serif font-bold">{product.name}</h1>
+            <h1 className="text-2xl font-serif font-bold">{product?.name}</h1>
             <p className="text-2xl font-mono font-extrabold">
-                {product.price * quantity!}$
+                {product?.price * quantity!}$
             </p>
             </div>
             <div className="quan flex items-center ml-8 ">
-            <button onClick={() => handleDecrease(product._id)}>
+            <button onClick={() => handleDecrease(product?._id)}>
                 <MinusCircle
                 size={24}
                 className="rounded-full text-white bg-[#634135]"

@@ -60,15 +60,17 @@ const handleAddToCart=useCallback(
                             <div className="bg-[#fffcfb] h-[35%] w-full   p-1">
                             <h2 className="text-lg font-serif font-semibold">{product.name}</h2>
                             <p className="text-amber-900 font-bold">{product.price} $</p>
-                            <div className="flex justify-center">
+                            <div className=" justify-center">
                                 {userRole ==="admin"&&
                                 <button 
                                 onClick={()=>{
                                     deleteProduct(product._id)
                                 }} 
                                     className="flex items-center  w-full justify-center bg-[#B86F55] text-white px-4 py-2 rounded mt-2 hover:bg-[#a07263] transition-colors duration-300 ml-2" title="View Details"
-                                >Delete product</button>
+                                >Delete</button>
                                 }
+                                {
+                                  userRole ==="user"&&  
                                 <button onClick={() => {
                                 isLogin ==="true"?
                                         handleAddToCart({
@@ -85,6 +87,7 @@ const handleAddToCart=useCallback(
                                 }} className="flex items-center  w-full justify-center bg-[#B86F55] text-white px-4 py-2 rounded mt-2 hover:bg-[#a07263] transition-colors duration-300 ml-2" title="View Details">
                                 Add To Cart
                                 </button>
+                                }
                             </div>
                             
                             </div>

@@ -25,7 +25,7 @@ import Link from "next/link"
                 <h1 className="text-[#331A12] text-4xl font-bold font-serif">{User.userName}</h1>
                 <p className="text-[#6D6161] text-lg">{User.email}</p>
             </div>
-            <div className="pages gap-4 mt-14 w-[70%] flex flex-col justify-center items-center">
+            <div className="pages h-full gap-4 mt-6 w-[70%] flex flex-col justify-center items-center">
                 {
                     userRole === "admin" &&
                     <Link  href={"/Add"}
@@ -47,8 +47,8 @@ import Link from "next/link"
                     setIsLogin("false")
                     localStorage.setItem("isLogin", "false")
                 }
-                    } href="/login" className="flex rounded-md shadow shadow-[#331A12] text-[#331A12] text-2xl justify-evenly bg-[#FBECE0] p-4 w-full">
-                    <LogOut/> Logout
+                    } href="/login" className="absolute top-1  right-1 rounded-tr-full shadow shadow-[#331A12] text-[#331A12] text-2xl   p-2 ">
+                    <LogOut/>
                 </Link>
             </div>
         </div>

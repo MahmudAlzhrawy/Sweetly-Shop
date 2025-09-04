@@ -3,7 +3,6 @@ import Loading from "@/app/loading";
 import { useProductsAndOrders } from "@/Context/Products&OrdersManageContext";
 import { useUserManage } from "@/Context/UserManageContext";
 import { Toast } from "@/sweetalert";
-import { AddCartItem } from "@/utils/typs/typs";
 import { X ,PlusCircle ,MinusCircle } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -26,8 +25,9 @@ export default function ProductDetails() {
   const filteredProduct =useMemo(()=>{
       return products.find((p) => p._id === productID);
   },[products,isOpenDetailes]) 
+
   const filtredItem= useMemo(()=>{
-   return cart.items.find((item) => item.product._id === productID);
+   return cart.items.find((item) => item.product?._id.toString() === productID);
   },[cart.items, productID])
   const[sweetlyId,setID]=useState<string>('')
   
