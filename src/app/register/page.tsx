@@ -1,8 +1,12 @@
 import Register from "@/components/Auth/Register";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-
-export default function LoginPage() {
+export const metadata:Metadata = {
+    title: "Register",
+    description: "Create a new account",
+}
+export default function RegisterPage() {
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-[#A05034]">
             <div className="w-full items-center  fixed bottom-0 flex flex-col  h-[90vh]  px-4 rounded-t-3xl  bg-[#FDF9F5]">

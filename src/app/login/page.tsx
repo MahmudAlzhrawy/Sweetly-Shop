@@ -1,7 +1,10 @@
 import Login from "@/components/Auth/Login";
+import { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
-
+export const metadata:Metadata = {
+    title: "Login",
+    description: "User login page",
+};
 export default function LoginPage() {
     return (
         <div className="flex flex-col items-center justify-center h-screen  bg-[#A05034]">

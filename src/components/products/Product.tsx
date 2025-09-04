@@ -98,7 +98,7 @@ const handleAddToCart=useCallback(
           </div>
           <div className="addtocart">
             <button onClick={()=>{
-              isLogin?
+              isLogin ==="true"?
               handleAddToCart({
                 productId:filteredProduct._id,
                 quantity:1,

@@ -5,10 +5,13 @@ import Card from "@/UI/Card";
 import { useCallback,useMemo} from "react";
 import { useUserManage } from "@/Context/UserManageContext";
 import Image from "next/image";
+import { Toast } from "@/sweetalert";
+import { useRouter } from "next/navigation";
 
 export default function MainProducts(){
-    const{setOpenDetailes,setProductID,deleteProduct,setFilter,cayegoryFilter,products,isLoading,error,filter} =useProductsAndOrders()
-    const{userRole}=useUserManage()
+    const{addToCart,setOpenDetailes,setProductID,deleteProduct,setFilter,cayegoryFilter,products,isLoading,error,filter} =useProductsAndOrders()
+    const{userRole,isLogin,userId}=useUserManage()
+    const router =useRouter()
     //callbacks function
 
 const handleOpen =useCallback(
@@ -28,7 +31,9 @@ const filteredProducts = useMemo(() => {
     category.toLowerCase().includes(categorySearch.toLowerCase()));
   });
 }, [products, filter, cayegoryFilter]);
-
+const handleAddToCart=useCallback(
+  ({userId, productId, quantity})=>addToCart({userId, productId, quantity})
+  ,[])
     return(
     <div className="">
         <div className="titles flex justify-between px-4">
@@ -45,16 +50,17 @@ const filteredProducts = useMemo(() => {
                             <Image onClick={()=>{
                                     handleOpen(product._id)
                                 }}  src={product.image} alt={product.name} 
-                                height={40}
+                                height={60}
                                 width={60}
-                                loading="lazy"
-                            className="w-full overflow-hidden bg-transparent border-none h-full hover:scale-110 transition-all duration-300 ease-in-out  object-cover mb-2 " >
+                                className=" w-full overflow-hidden bg-transparent border-none h-full hover:scale-110 transition-all duration-300 ease-in-out   mb-2 "
+                              
+                                />
 
-                            </Image>
+                           
                             <div className="bg-[#fffcfb] h-[35%] w-full   p-1">
                             <h2 className="text-lg font-serif font-semibold">{product.name}</h2>
                             <p className="text-amber-900 font-bold">{product.price} $</p>
-                            <div>
+                            <div className="flex justify-center">
                                 {userRole ==="admin"&&
                                 <button 
                                 onClick={()=>{
@@ -63,7 +69,24 @@ const filteredProducts = useMemo(() => {
                                     className="flex items-center  w-full justify-center bg-[#B86F55] text-white px-4 py-2 rounded mt-2 hover:bg-[#a07263] transition-colors duration-300 ml-2" title="View Details"
                                 >Delete product</button>
                                 }
+                                <button onClick={() => {
+                                isLogin ==="true"?
+                                        handleAddToCart({
+                                        productId:product._id,
+                                        quantity:1,
+                                        userId:userId
+                                    }):(
+                                        Toast.fire({
+                                        icon: "warning",
+                                        title: "You Must Login First",
+                                        }),
+                                        router.push("/login"))
+
+                                }} className="flex items-center  w-full justify-center bg-[#B86F55] text-white px-4 py-2 rounded mt-2 hover:bg-[#a07263] transition-colors duration-300 ml-2" title="View Details">
+                                Add To Cart
+                                </button>
                             </div>
+                            
                             </div>
                         </Card>
                     ))}
@@ -75,3 +98,4 @@ const filteredProducts = useMemo(() => {
     </div>
     )
 }
+

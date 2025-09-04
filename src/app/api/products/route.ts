@@ -27,25 +27,31 @@ export async function POST(request: NextRequest) {
     const description = formData.get("description") as string;
     const price = parseFloat(formData.get("price") as string);
 
-    // حفظ الصورة في مجلد /public/uploads
+    
     let imageUrl = "";
-    if (file) {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
+if (file) {
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
 
-      const upload = await new Promise<{ secure_url: string }>((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "products" }, // ⬅️ الصور هتتخزن في فولدر "products"
-          (error, result) => {
-            if (error || !result) reject(error);
-            else resolve(result as { secure_url: string });
-          }
-        );
-        stream.end(buffer);
-      });
+  const upload = await new Promise<{ secure_url: string }>((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "products",
+        format: "webp",        // ⬅️ يحفظ الصورة بصيغة WebP (أخف من JPG/PNG)
+        quality: "auto:good",  // ⬅️ يختار جودة مناسبة مع ضغط ممتاز
+        fetch_format: "auto",  // ⬅️ يحفظها بأفضل صيغة مدعومة للمتصفح
+      },
+      (error, result) => {
+        if (error || !result) reject(error);
+        else resolve(result as { secure_url: string });
+      }
+    );
+    stream.end(buffer);
+  });
 
-      imageUrl = upload.secure_url;
-    }
+  imageUrl = upload.secure_url;
+}
+
     const newProduct = new Product({ 
       category,
       type,
